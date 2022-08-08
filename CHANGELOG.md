@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.3...HEAD)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.4...HEAD)
+
+**Fixed bugs:**
+
+- Test fixing somthing [\#5](https://github.com/phpfour/changelog-tag-release-action/issues/5)
+
+## [1.0.4](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.4) (2022-08-08)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.3...1.0.4)
 
 **Implemented enhancements:**
 
