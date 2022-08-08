@@ -1,3 +1,7 @@
-### Automatic Changelog generation on Pre-release
+### Automatic Changelog and Release
 
-Generate changelog on pre-release, create new tag and publish a new release.
+This is going to do the following: 
+
+- Generate a changelog
+- Create a tag
+- Publish a release
