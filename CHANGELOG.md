@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.2...HEAD)
+
+**Implemented enhancements:**
+
+- Upload FigLab logo [\#2](https://github.com/phpfour/changelog-tag-release-action/pull/2) ([phpfour](https://github.com/phpfour))
+
+**Fixed bugs:**
+
+- Something was broken that needs fixing [\#1](https://github.com/phpfour/changelog-tag-release-action/issues/1)
+
+## [1.0.2](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.2) (2022-08-08)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.1...1.0.2)
+
 ## [1.0.1](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.1) (2022-08-08)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.0...1.0.1)
