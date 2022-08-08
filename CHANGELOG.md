@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.2...HEAD)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.3...HEAD)
+
+**Implemented enhancements:**
+
+- Enhance the output of the changelog [\#4](https://github.com/phpfour/changelog-tag-release-action/issues/4)
+
+**Fixed bugs:**
+
+- Point to the right commit when creating a tag [\#3](https://github.com/phpfour/changelog-tag-release-action/issues/3)
+
+## [1.0.3](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.3) (2022-08-08)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.2...1.0.3)
 
 **Implemented enhancements:**
 
