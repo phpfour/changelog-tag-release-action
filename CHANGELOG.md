@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.4...HEAD)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.5...HEAD)
+
+**Implemented enhancements:**
+
+- Upload logo [\#6](https://github.com/phpfour/changelog-tag-release-action/pull/6) ([phpfour](https://github.com/phpfour))
+
+## [1.0.5](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.5) (2022-08-08)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.4...1.0.5)
 
 **Fixed bugs:**
 
