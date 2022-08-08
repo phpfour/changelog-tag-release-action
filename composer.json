@@ -1,0 +1,19 @@
+{
+    "name": "phpfour/changelog-tag-release-action",
+    "description": "A dummy repository to test GH actions",
+    "license": "Proprietary",
+    "authors": [
+        {
+            "name": "Mohammad Emran Hasan",
+            "email": "phpfour@gmail.com",
+            "homepage": "https://phpfour.com"
+        }
+    ],
+    "homepage": "https://github.com/phpfour",
+    "require": {
+        "php": "^8.1"
+    },
+    "extra": {
+        "version": "1.0"
+    }
+}
