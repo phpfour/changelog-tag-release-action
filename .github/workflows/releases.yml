@@ -15,11 +15,18 @@ jobs:
     name: Update changelog
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout Code" 
+        uses: actions/checkout@v3
         with:
           ref: master
+      - name: "✏️ Generate release changelog"
+        id: generate_changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
       - uses: avakar/tag-and-release@v1
         with:
           tag_name: ${{ github.event.inputs.tag_name }}
+          body: ${{ steps.generate_changelog.outputs.stdout }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
