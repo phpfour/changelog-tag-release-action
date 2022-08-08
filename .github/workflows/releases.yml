@@ -26,6 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
       - name: Commit changes
+        id: commit_changelog
         timeout-minutes: 1
         uses: EndBug/add-and-commit@v9
         with:
@@ -35,5 +36,6 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.tag_name }}
           body: ${{ steps.generate_changelog.outputs.stdout }}
+          commit: ${{ steps.commit_changelog.outputs.commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
