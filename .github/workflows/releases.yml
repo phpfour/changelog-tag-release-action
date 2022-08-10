@@ -36,7 +36,6 @@ jobs:
       - name: Extract new changes
         id: extract_change
         run: |
-          # CHANGELOG=$(cat CHANGELOG.md | grep -E '${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}' -A4)
           echo ::set-output name=change_log::`$(cat CHANGELOG.md | grep -E '${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}' -A4)`
       - uses: avakar/tag-and-release@v1
         with:
@@ -45,3 +44,4 @@ jobs:
           commit: ${{ steps.commit_changelog.outputs.commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# CHANGELOG=$(cat CHANGELOG.md | grep -E '${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}' -A4)
