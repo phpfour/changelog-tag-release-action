@@ -1,6 +1,14 @@
 # Changelog
 
-## [1.0.7](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.7)
+## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.7...HEAD)
+
+**Merged pull requests:**
+
+- Use better configuration for Changelog [\#8](https://github.com/phpfour/changelog-tag-release-action/pull/8) ([phpfour](https://github.com/phpfour))
+
+## [1.0.7](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.7) (2022-08-10)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.6...1.0.7)
 
