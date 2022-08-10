@@ -1,14 +1,22 @@
 # Changelog
 
-## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
+## [1.0.9](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.9) (08/10/2022)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.7...HEAD)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.8...1.0.9)
+
+**Implemented enhancements:**
+
+- Further improve Changelog generation [\#9](https://github.com/phpfour/changelog-tag-release-action/pull/9) ([phpfour](https://github.com/phpfour))
+
+## [1.0.8](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.8) (08/10/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.7...1.0.8)
 
 **Merged pull requests:**
 
 - Use better configuration for Changelog [\#8](https://github.com/phpfour/changelog-tag-release-action/pull/8) ([phpfour](https://github.com/phpfour))
 
-## [1.0.7](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.7) (2022-08-10)
+## [1.0.7](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.7) (08/10/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.6...1.0.7)
 
@@ -16,7 +24,7 @@
 
 - Improve GH workflow [\#7](https://github.com/phpfour/changelog-tag-release-action/pull/7) ([phpfour](https://github.com/phpfour))
 
-## [1.0.6](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.6) (2022-08-08)
+## [1.0.6](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.6) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.5...1.0.6)
 
@@ -24,7 +32,7 @@
 
 - Upload logo [\#6](https://github.com/phpfour/changelog-tag-release-action/pull/6) ([phpfour](https://github.com/phpfour))
 
-## [1.0.5](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.5) (2022-08-08)
+## [1.0.5](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.5) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.4...1.0.5)
 
@@ -32,7 +40,7 @@
 
 - Test fixing somthing [\#5](https://github.com/phpfour/changelog-tag-release-action/issues/5)
 
-## [1.0.4](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.4) (2022-08-08)
+## [1.0.4](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.4) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.3...1.0.4)
 
@@ -44,7 +52,7 @@
 
 - Point to the right commit when creating a tag [\#3](https://github.com/phpfour/changelog-tag-release-action/issues/3)
 
-## [1.0.3](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.3) (2022-08-08)
+## [1.0.3](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.3) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.2...1.0.3)
 
@@ -56,19 +64,19 @@
 
 - Something was broken that needs fixing [\#1](https://github.com/phpfour/changelog-tag-release-action/issues/1)
 
-## [1.0.2](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.2) (2022-08-08)
+## [1.0.2](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.2) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.1...1.0.2)
 
-## [1.0.1](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.1) (2022-08-08)
+## [1.0.1](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.1) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.0...1.0.1)
 
-## [1.0.0](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.0) (2022-08-08)
+## [1.0.0](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.0) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.0-pre...1.0.0)
 
-## [1.0.0-pre](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.0-pre) (2022-08-08)
+## [1.0.0-pre](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.0-pre) (08/08/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/e215b320ce289f4410c0f4e102708e513b64e232...1.0.0-pre)
 
