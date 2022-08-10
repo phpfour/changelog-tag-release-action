@@ -1,8 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/phpfour/changelog-tag-release-action/tree/HEAD)
+## [1.0.7](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.7)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.5...HEAD)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.6...1.0.7)
+
+**Merged pull requests:**
+
+- Improve GH workflow [\#7](https://github.com/phpfour/changelog-tag-release-action/pull/7) ([phpfour](https://github.com/phpfour))
+
+## [1.0.6](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.6) (2022-08-08)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.5...1.0.6)
 
 **Implemented enhancements:**
 
