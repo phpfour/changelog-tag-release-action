@@ -37,11 +37,11 @@ jobs:
         id: extract_change
         run: |
           CHANGELOG=$(cat CHANGELOG.md | grep -E '${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}' -A4)
-          echo $CHANGELOG
+          echo "CHANGELOG=$CHANGELOG" >> $GITHUB_ENV
       - uses: avakar/tag-and-release@v1
         with:
           tag_name: ${{ github.event.inputs.new_tag }}
-          body: ${{ steps.extract_change.outputs.stdout }}
+          body: "${{ env.CHANGELOG }}"
           commit: ${{ steps.commit_changelog.outputs.commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
