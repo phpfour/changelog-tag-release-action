@@ -25,18 +25,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
-      - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@v2
-        with:
-          find: "Unreleased"
-          replace: ${{ github.event.inputs.tag_name }}
-          include: "CHANGELOG.md"
-      - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@v2
-        with:
-          find: "HEAD"
-          replace: ${{ github.event.inputs.tag_name }}
-          include: "CHANGELOG.md"
+          future-release: ${{ github.event.inputs.tag_name }}
+          date-format: "%m/%d/%Y"
       - name: Commit changes
         id: commit_changelog
         timeout-minutes: 1
