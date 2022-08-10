@@ -25,8 +25,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
-          future-release: ${{ github.event.inputs.tag_name }}
-          date-format: "%m/%d/%Y"
+          futureRelease: ${{ github.event.inputs.tag_name }}
+          dateFormat: "%m/%d/%Y"
       - name: Commit changes
         id: commit_changelog
         timeout-minutes: 1
