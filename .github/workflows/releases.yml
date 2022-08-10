@@ -1,13 +1,12 @@
-name: On pre-release
+name: Release
 on:
-  release:
-    types: [prereleased]
-
-  # Optionally you can use `workflow_dispatch` to run Changelog CI Manually
   workflow_dispatch:
     inputs:
-      tag_name:
-        description: 'Set Tag'
+      new_tag:
+        description: 'New Tag'
+        required: true  
+      prev_tag:
+        description: 'Prev Tag'
         required: true  
 
 jobs:
@@ -25,7 +24,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
-          futureRelease: ${{ github.event.inputs.tag_name }}
+          futureRelease: ${{ github.event.inputs.new_tag }}
           dateFormat: "%m/%d/%Y"
       - name: Commit changes
         id: commit_changelog
@@ -34,10 +33,15 @@ jobs:
         with:
           message: 'Update CHANGELOG.md'
           branch: master
+      - name: Extract new changes
+        id: extract_change
+        run: |
+          NEW_CHANGES=cat CHANGELOG.md | grep -E "${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}" -A4
+          echo "::set-output name=changes::${NEW_CHANGES}"
       - uses: avakar/tag-and-release@v1
         with:
-          tag_name: ${{ github.event.inputs.tag_name }}
-          body: ${{ steps.generate_changelog.outputs.stdout }}
+          tag_name: ${{ github.event.inputs.new_tag }}
+          body: ${{ steps.extract_change.outputs.changes }}
           commit: ${{ steps.commit_changelog.outputs.commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
