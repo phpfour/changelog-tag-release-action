@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.12](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.12) (08/10/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.11...1.0.12)
+
+**Fixed bugs:**
+
+- Fix Release Note [\#12](https://github.com/phpfour/changelog-tag-release-action/pull/12) ([phpfour](https://github.com/phpfour))
+
 ## [1.0.11](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.11) (08/10/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.10...1.0.11)
