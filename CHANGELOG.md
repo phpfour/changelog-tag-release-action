@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.16](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.16) (08/10/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.15...1.0.16)
+
+**Merged pull requests:**
+
+- Update releases.yml [\#16](https://github.com/phpfour/changelog-tag-release-action/pull/16) ([thezainuddin](https://github.com/thezainuddin))
+
 ## [1.0.15](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.15) (08/10/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.14...1.0.15)
