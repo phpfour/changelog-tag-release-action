@@ -46,7 +46,7 @@ jobs:
           sinceTag: ${{ github.event.inputs.prev_tag }}
       - name: Extract new changes
         id: extract_change
-        run: echo ::set-output name=changelog::$(cat UPDATES.md | awk NF | head -n -1 | tail -r | head -n -2)
+        run: echo ::set-output name=changelog::$(cat UPDATES.md | awk NF | head -n -1 | tac | head -n -2)
       - uses: avakar/tag-and-release@v1
         with:
           tag_name: ${{ github.event.inputs.new_tag }}
