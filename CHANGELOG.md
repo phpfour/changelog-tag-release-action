@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.20](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.20) (08/11/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.19...1.0.20)
+
+- Use simpler syntax [\#24](https://github.com/phpfour/changelog-tag-release-action/issues/24)
+- Support multi-line changes [\#22](https://github.com/phpfour/changelog-tag-release-action/pull/22) ([phpfour](https://github.com/phpfour))
+
+- Fix a naughty bug [\#23](https://github.com/phpfour/changelog-tag-release-action/issues/23)
+
 ## [1.0.19](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.19) (08/11/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.18...1.0.19)
