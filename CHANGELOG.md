@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.19](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.19) (08/11/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.18...1.0.19)
+
+- Fix invalid tail command [\#21](https://github.com/phpfour/changelog-tag-release-action/pull/21) ([phpfour](https://github.com/phpfour))
+
 ## [1.0.18](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.18) (08/11/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.17...1.0.18)
