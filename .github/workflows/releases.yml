@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: master
-      - name: "✏️ Generate release changelog"
+      - name: "Generate full changelog"
         id: generate_changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
@@ -26,6 +26,7 @@ jobs:
           output: CHANGELOG.md
           futureRelease: ${{ github.event.inputs.new_tag }}
           dateFormat: "%m/%d/%Y"
+          simpleList: true
       - name: Commit changes
         id: commit_changelog
         timeout-minutes: 1
@@ -33,9 +34,19 @@ jobs:
         with:
           message: 'Update CHANGELOG.md'
           branch: master
+      - name: "Generate new changelog"
+        id: generate_changelog_partial
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          output: UPDATES.md
+          futureRelease: ${{ github.event.inputs.new_tag }}
+          dateFormat: "%m/%d/%Y"
+          simpleList: true
+          sinceTag: ${{ github.event.inputs.prev_tag }}
       - name: Extract new changes
         id: extract_change
-        run: echo ::set-output name=changelog::$(cat CHANGELOG.md | grep -E '${{ github.event.inputs.prev_tag }}.*${{ github.event.inputs.new_tag }}' -A4)
+        run: echo ::set-output name=changelog::$(cat UPDATES.md | awk NF | head -n -1 | tail -r | head -n -2)
       - uses: avakar/tag-and-release@v1
         with:
           tag_name: ${{ github.event.inputs.new_tag }}
