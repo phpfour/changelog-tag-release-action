@@ -44,9 +44,18 @@ jobs:
           dateFormat: "%m/%d/%Y"
           simpleList: true
           sinceTag: ${{ github.event.inputs.prev_tag }}
+          compareLink: false
       - name: Extract new changes
         id: extract_change
-        run: echo ::set-output name=changelog::$(cat UPDATES.md | awk NF | head -n -1 | tac | head -n -2)
+        run: |
+          content=`cat UPDATES.md | awk NF | head -n -1 | tac | head -n -2`
+          # the following lines are only required for multi lines
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=changelog::$content"
+          # echo ::set-output name=changelog::$(cat UPDATES.md | awk NF | head -n -1 | tac | head -n -2)
       - uses: avakar/tag-and-release@v1
         with:
           tag_name: ${{ github.event.inputs.new_tag }}
