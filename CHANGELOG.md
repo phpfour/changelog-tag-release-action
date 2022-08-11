@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.17](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.17) (08/11/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.16...1.0.17)
+
+**Implemented enhancements:**
+
+- Some exciting feature added [\#18](https://github.com/phpfour/changelog-tag-release-action/issues/18)
+
+**Fixed bugs:**
+
+- Fix a very irregular bug  [\#17](https://github.com/phpfour/changelog-tag-release-action/issues/17)
+
+**Closed issues:**
+
+- Update the documentation to include something special [\#19](https://github.com/phpfour/changelog-tag-release-action/issues/19)
+
 ## [1.0.16](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.16) (08/10/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.15...1.0.16)
