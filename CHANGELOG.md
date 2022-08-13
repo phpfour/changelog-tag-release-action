@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.21](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.21) (08/13/2022)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.20...1.0.21)
+
+- Git checkout and commit using PAT [\#25](https://github.com/phpfour/changelog-tag-release-action/pull/25) ([phpfour](https://github.com/phpfour))
+
 ## [1.0.20](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.20) (08/11/2022)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.19...1.0.20)
