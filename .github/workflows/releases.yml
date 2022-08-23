@@ -33,11 +33,6 @@ jobs:
       - name: Remove links
         run: |
           content=`cat CHANGELOG.md | sed 's/\[\([^][]*\)\]([^()]*)/\1/g'`
-          # the following lines are only required for multi lines
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
           echo $content > CHANGELOG.md
       - name: Commit changes
         id: commit_changelog
