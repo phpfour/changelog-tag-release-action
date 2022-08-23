@@ -30,6 +30,9 @@ jobs:
           simpleList: true
           compareLink: false
           usernamesAsGithubLogins: true
+      - name: Remove links
+        run: |
+          cat CHANGELOG.md | sed 's/\[\([^][]*\)\]([^()]*)/\1/g' > CHANGELOG.md
       - name: Commit changes
         id: commit_changelog
         timeout-minutes: 1
