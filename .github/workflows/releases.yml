@@ -26,7 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
           futureRelease: ${{ github.event.inputs.new_tag }}
-          dateFormat: "%m/%d/%Y"
+          dateFormat: "%d %B %Y"
           simpleList: true
           compareLink: false
           usernamesAsGithubLogins: true
@@ -44,7 +44,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: UPDATES.md
           futureRelease: ${{ github.event.inputs.new_tag }}
-          dateFormat: "%m/%d/%Y"
+          dateFormat: "%d %B %Y"
           simpleList: true
           sinceTag: ${{ github.event.inputs.prev_tag }}
           compareLink: false
