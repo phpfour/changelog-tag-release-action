@@ -28,6 +28,8 @@ jobs:
           futureRelease: ${{ github.event.inputs.new_tag }}
           dateFormat: "%m/%d/%Y"
           simpleList: true
+          compareLink: false
+          usernamesAsGithubLogins: true
       - name: Commit changes
         id: commit_changelog
         timeout-minutes: 1
@@ -46,6 +48,7 @@ jobs:
           simpleList: true
           sinceTag: ${{ github.event.inputs.prev_tag }}
           compareLink: false
+          usernamesAsGithubLogins: true
       - name: Extract new changes
         id: extract_change
         run: |
