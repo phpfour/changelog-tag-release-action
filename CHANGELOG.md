@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.31](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.31) (05-Sep-2022)
+
+- A nice feature to make Changelogs look more user friendly [\#36](https://github.com/phpfour/changelog-tag-release-action/issues/36)
+
+- A bugfix on the date format [\#37](https://github.com/phpfour/changelog-tag-release-action/issues/37)
+
+- Update the documentation to reflect latest changes [\#38](https://github.com/phpfour/changelog-tag-release-action/issues/38)
+
 ## [1.0.30](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.30) (05-Sep-2022)
 
 - Use less troublesome date format [\#35](https://github.com/phpfour/changelog-tag-release-action/pull/35) (@phpfour)
