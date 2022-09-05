@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: "Generate full changelog"
         id: generate_changelog
-        uses: phpfour/action-github-changelog-generator@v2.5
+        uses: phpfour/action-github-changelog-generator@v2.6
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
@@ -43,7 +43,7 @@ jobs:
           branch: master
       - name: "Generate new changelog"
         id: generate_changelog_partial
-        uses: phpfour/action-github-changelog-generator@v2.5
+        uses: phpfour/action-github-changelog-generator@v2.6
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: UPDATES.md
