@@ -21,12 +21,12 @@ jobs:
           token: ${{ secrets.GH_PERSONAL_TOKEN }}
       - name: "Generate full changelog"
         id: generate_changelog
-        uses: phpfour/action-github-changelog-generator@v2.6
+        uses: phpfour/action-github-changelog-generator@v2.7
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: CHANGELOG.md
           futureRelease: ${{ github.event.inputs.new_tag }}
-          dateFormat: "%d %B %Y"
+          dateFormat: '%d %B %Y'
           simpleList: true
           compareLink: false
           usernamesAsGithubLogins: true
@@ -43,12 +43,12 @@ jobs:
           branch: master
       - name: "Generate new changelog"
         id: generate_changelog_partial
-        uses: phpfour/action-github-changelog-generator@v2.6
+        uses: phpfour/action-github-changelog-generator@v2.7
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           output: UPDATES.md
           futureRelease: ${{ github.event.inputs.new_tag }}
-          dateFormat: "%d %B %Y"
+          dateFormat: '%d %B %Y'
           simpleList: true
           sinceTag: ${{ github.event.inputs.prev_tag }}
           compareLink: false
