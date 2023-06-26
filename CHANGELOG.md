@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.32](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.32) (26-Jun-2023)
+
+- Action failing [\#40](https://github.com/phpfour/changelog-tag-release-action/issues/40)
+
 ## [1.0.31](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.31) (05-Sep-2022)
 
 - A nice feature to make Changelogs look more user friendly [\#36](https://github.com/phpfour/changelog-tag-release-action/issues/36)
