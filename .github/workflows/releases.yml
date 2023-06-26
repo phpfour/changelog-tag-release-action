@@ -59,7 +59,7 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=changelog::$content"
-      - uses: phpfour/tag-and-release-v2@v2.0.1
+      - uses: phpfour/tag-and-release-v2@v2.0.2
         with:
           tag_name: ${{ github.event.inputs.new_tag }}
           body: ${{steps.extract_change.outputs.changelog}}
