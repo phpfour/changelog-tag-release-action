@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.34](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.34) (26-Jun-2023)
+
+- Is everything alright ? [\#42](https://github.com/phpfour/changelog-tag-release-action/issues/42)
+
 ## [1.0.33](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.33) (26-Jun-2023)
 
 - Fix the node version [\#41](https://github.com/phpfour/changelog-tag-release-action/issues/41)
