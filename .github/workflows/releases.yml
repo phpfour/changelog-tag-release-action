@@ -62,14 +62,14 @@ jobs:
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.new_tag }}
           commit-sha: ${{ steps.commit_changelog.outputs.commit_sha }}
       - uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.event.inputs.new_tag }}
           body: ${{steps.extract_change.outputs.changelog}}
-          commit: ${{ steps.commit_changelog.outputs.commit_sha }}
+          # commit: ${{ steps.commit_changelog.outputs.commit_sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
