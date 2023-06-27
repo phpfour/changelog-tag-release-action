@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
+
+- Releasing tagged commit [\#44](https://github.com/phpfour/changelog-tag-release-action/issues/44)
+- Tagging a commit [\#43](https://github.com/phpfour/changelog-tag-release-action/issues/43)
+
 ## [1.0.34](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.34) (27-Jun-2023)
 
 - Is everything alright ? [\#42](https://github.com/phpfour/changelog-tag-release-action/issues/42)
