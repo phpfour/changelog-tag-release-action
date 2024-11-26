@@ -14,6 +14,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+      issues: read
     
     steps:
       - uses: actions/checkout@v4
@@ -38,10 +39,10 @@ jobs:
           script: |
             const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
             
-            // Query for merged PRs since last release
+            // Query for both PRs and Issues
             const query = `query ($owner: String!, $repo: String!, $base: String!) {
               repository(owner: $owner, name: $repo) {
-                pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                pullRequests: pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
                   nodes {
                     title
                     number
@@ -51,6 +52,21 @@ jobs:
                         name
                       }
                     }
+                    type: __typename
+                  }
+                }
+                issues: issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                  nodes {
+                    title
+                    number
+                    closedAt
+                    labels(first: 5) {
+                      nodes {
+                        name
+                      }
+                    }
+                    type: __typename
+                    isPullRequest: isPullRequest
                   }
                 }
               }
@@ -62,39 +78,97 @@ jobs:
               base: 'main'
             });
 
-            // Filter PRs merged after the last release
-            const prs = repository.pullRequests.nodes.filter(pr => {
+            // Combine and filter PRs and Issues
+            let items = [
+              ...repository.pullRequests.nodes.map(pr => ({
+                ...pr,
+                date: pr.mergedAt
+              })),
+              ...repository.issues.nodes
+                .filter(issue => !issue.isPullRequest) // Exclude issues that are actually PRs
+                .map(issue => ({
+                  ...issue,
+                  date: issue.closedAt
+                }))
+            ];
+
+            // Filter items after the last release
+            items = items.filter(item => {
               if (!latestTag) return true;
-              return new Date(pr.mergedAt) > new Date(context.payload.before);
+              return new Date(item.date) > new Date(context.payload.before);
             });
 
-            // Group PRs by label
-            const groupedPRs = {
-              feature: [],
-              enhancement: [],
-              bug: [],
-              documentation: []
+            // Group items by label and type
+            const groupedItems = {
+              features: { prs: [], issues: [] },
+              enhancements: { prs: [], issues: [] },
+              bugs: { prs: [], issues: [] },
+              documentation: { prs: [], issues: [] },
+              other: { prs: [], issues: [] } // For items without matching labels
             };
 
-            prs.forEach(pr => {
-              const labels = pr.labels.nodes.map(label => label.name);
-              Object.keys(groupedPRs).forEach(key => {
-                if (labels.includes(key)) {
-                  groupedPRs[key].push(pr);
-                }
-              });
+            items.forEach(item => {
+              const labels = item.labels.nodes.map(label => label.name);
+              const type = item.type === 'PullRequest' ? 'prs' : 'issues';
+              
+              // Determine the group based on labels
+              let grouped = false;
+              if (labels.includes('feature')) {
+                groupedItems.features[type].push(item);
+                grouped = true;
+              }
+              if (labels.includes('enhancement')) {
+                groupedItems.enhancements[type].push(item);
+                grouped = true;
+              }
+              if (labels.includes('bug')) {
+                groupedItems.bugs[type].push(item);
+                grouped = true;
+              }
+              if (labels.includes('documentation')) {
+                groupedItems.documentation[type].push(item);
+                grouped = true;
+              }
+              
+              // If no matching labels, add to 'other'
+              if (!grouped) {
+                groupedItems.other[type].push(item);
+              }
             });
 
             // Generate markdown
             let markdown = `## [${process.env.VERSION}] - ${new Date().toISOString().split('T')[0]}\n\n`;
 
-            for (const [label, items] of Object.entries(groupedPRs)) {
-              if (items.length > 0) {
-                markdown += `### ${label.charAt(0).toUpperCase() + label.slice(1)}\n\n`;
-                items.forEach(pr => {
-                  markdown += `- ${pr.title} (#${pr.number})\n`;
-                });
-                markdown += '\n';
+            const categories = {
+              features: 'Features',
+              enhancements: 'Enhancements',
+              bugs: 'Bug Fixes',
+              documentation: 'Documentation',
+              other: 'Other Changes'
+            };
+
+            for (const [key, title] of Object.entries(categories)) {
+              const prs = groupedItems[key].prs;
+              const issues = groupedItems[key].issues;
+              
+              if (prs.length > 0 || issues.length > 0) {
+                markdown += `### ${title}\n\n`;
+                
+                if (prs.length > 0) {
+                  markdown += `#### Pull Requests\n`;
+                  prs.forEach(pr => {
+                    markdown += `- ${pr.title} (#${pr.number})\n`;
+                  });
+                  markdown += '\n';
+                }
+                
+                if (issues.length > 0) {
+                  markdown += `#### Issues\n`;
+                  issues.forEach(issue => {
+                    markdown += `- ${issue.title} (#${issue.number})\n`;
+                  });
+                  markdown += '\n';
+                }
               }
             }
 
