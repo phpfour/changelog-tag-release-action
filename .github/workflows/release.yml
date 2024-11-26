@@ -1,0 +1,129 @@
+name: Generate Changelog & Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.5)'
+        required: true
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get latest release
+        id: latest_release
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$latest_tag" ]; then
+            echo "No previous tags found, using initial commit"
+            echo "latest_tag=" >> $GITHUB_OUTPUT
+          else
+            echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate release notes
+        id: release_notes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
+            
+            // Query for merged PRs since last release
+            const query = `query ($owner: String!, $repo: String!, $base: String!) {
+              repository(owner: $owner, name: $repo) {
+                pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                  nodes {
+                    title
+                    number
+                    mergedAt
+                    labels(first: 5) {
+                      nodes {
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+
+            const { repository } = await github.graphql(query, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: 'main'
+            });
+
+            // Filter PRs merged after the last release
+            const prs = repository.pullRequests.nodes.filter(pr => {
+              if (!latestTag) return true;
+              return new Date(pr.mergedAt) > new Date(context.payload.before);
+            });
+
+            // Group PRs by label
+            const groupedPRs = {
+              feature: [],
+              enhancement: [],
+              bug: [],
+              documentation: []
+            };
+
+            prs.forEach(pr => {
+              const labels = pr.labels.nodes.map(label => label.name);
+              Object.keys(groupedPRs).forEach(key => {
+                if (labels.includes(key)) {
+                  groupedPRs[key].push(pr);
+                }
+              });
+            });
+
+            // Generate markdown
+            let markdown = `## [${process.env.VERSION}] - ${new Date().toISOString().split('T')[0]}\n\n`;
+
+            for (const [label, items] of Object.entries(groupedPRs)) {
+              if (items.length > 0) {
+                markdown += `### ${label.charAt(0).toUpperCase() + label.slice(1)}\n\n`;
+                items.forEach(pr => {
+                  markdown += `- ${pr.title} (#${pr.number})\n`;
+                });
+                markdown += '\n';
+              }
+            }
+
+            // Save release notes for both the release and changelog
+            core.setOutput('notes', markdown);
+
+      - name: Update CHANGELOG.md
+        run: |
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog\n\nAll notable changes to this project will be documented in this file.\n" > CHANGELOG.md
+          fi
+          echo "${{ steps.release_notes.outputs.notes }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
+
+      - name: Commit and push CHANGELOG.md
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog for version ${{ github.event.inputs.version }}"
+          git push
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.event.inputs.version }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: Release ${{ github.event.inputs.version }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
