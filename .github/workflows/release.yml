@@ -33,10 +33,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           sinceTag: ${{ github.event.inputs.version_prev }}
           futureRelease: ${{ github.event.inputs.version }}
-          dateFormat: '%d-%b-%Y'
-          simpleList: true
-          compareLink: false
-          usernamesAsGithubLogins: true
           pullRequests: true
           prWoLabels: false
           issues: true
