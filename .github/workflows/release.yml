@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  create-release:
+  changelog:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,202 +20,39 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      - name: Get latest release
-        id: latest_release
-        run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$latest_tag" ]; then
-            echo "No previous tags found, using initial commit"
-            echo "latest_tag=" >> $GITHUB_OUTPUT
-          else
-            echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
-          fi
+          ref: ${{ github.ref }}
 
-      - name: Generate release notes
-        id: release_notes
-        env:
-          VERSION: ${{ github.event.inputs.version }}
-        uses: actions/github-script@v7
+      - name: Generate changelog
+        id: changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
-          script: |
-            const version = process.env.VERSION;
-            const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
-            
-            // Query for PRs
-            const prData = await github.graphql(`
-              query ($owner: String!, $repo: String!, $base: String!) {
-                repository(owner: $owner, name: $repo) {
-                  pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
-                    nodes {
-                      title
-                      number
-                      mergedAt
-                      labels(first: 5) {
-                        nodes {
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            `, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              base: 'main'
-            });
-
-            // Query for Issues
-            const issueData = await github.graphql(`
-              query ($owner: String!, $repo: String!) {
-                repository(owner: $owner, name: $repo) {
-                  issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
-                    nodes {
-                      title
-                      number
-                      closedAt
-                      labels(first: 5) {
-                        nodes {
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            `, {
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-
-            // Process PRs
-            const prs = prData.repository.pullRequests.nodes.map(pr => ({
-              title: pr.title,
-              number: pr.number,
-              date: pr.mergedAt,
-              labels: pr.labels.nodes.map(label => label.name),
-              type: 'pr'
-            }));
-
-            // Process Issues
-            const issues = issueData.repository.issues.nodes.map(issue => ({
-              title: issue.title,
-              number: issue.number,
-              date: issue.closedAt,
-              labels: issue.labels.nodes.map(label => label.name),
-              type: 'issue'
-            }));
-
-            // Filter items after the last release
-            const filterByDate = item => {
-              if (!latestTag) return true;
-              return new Date(item.date) > new Date(context.payload.before);
-            };
-
-            const filteredPRs = prs.filter(filterByDate);
-            const filteredIssues = issues.filter(filterByDate);
-
-            // Group items by label
-            const groupItems = (items) => {
-              const grouped = {
-                features: [],
-                enhancements: [],
-                bugs: [],
-                documentation: [],
-                other: []
-              };
-
-              items.forEach(item => {
-                let categorized = false;
-                
-                if (item.labels.includes('feature')) {
-                  grouped.features.push(item);
-                  categorized = true;
-                }
-                if (item.labels.includes('enhancement')) {
-                  grouped.enhancements.push(item);
-                  categorized = true;
-                }
-                if (item.labels.includes('bug')) {
-                  grouped.bugs.push(item);
-                  categorized = true;
-                }
-                if (item.labels.includes('documentation')) {
-                  grouped.documentation.push(item);
-                  categorized = true;
-                }
-                
-                if (!categorized) {
-                  grouped.other.push(item);
-                }
-              });
-
-              return grouped;
-            };
-
-            const groupedPRs = groupItems(filteredPRs);
-            const groupedIssues = groupItems(filteredIssues);
-
-            // Generate markdown
-            let markdown = `## [${version}] - ${new Date().toISOString().split('T')[0]}\n\n`;
-
-            const categories = {
-              features: 'Features',
-              enhancements: 'Enhancements',
-              bugs: 'Bug Fixes',
-              documentation: 'Documentation',
-              other: 'Other Changes'
-            };
-
-            // Helper function to add items to markdown
-            const addItemsToMarkdown = (items, type) => {
-              if (items.length === 0) return '';
-              
-              let section = `#### ${type === 'pr' ? 'Pull Requests' : 'Issues'}\n`;
-              items.forEach(item => {
-                section += `- ${item.title} (#${item.number})\n`;
-              });
-              return section + '\n';
-            };
-
-            // Generate content for each category
-            for (const [key, title] of Object.entries(categories)) {
-              const prContent = addItemsToMarkdown(groupedPRs[key], 'pr');
-              const issueContent = addItemsToMarkdown(groupedIssues[key], 'issue');
-              
-              if (prContent || issueContent) {
-                markdown += `### ${title}\n\n`;
-                markdown += prContent;
-                markdown += issueContent;
-              }
-            }
-
-            // Save release notes for both the release and changelog
-            core.setOutput('notes', markdown);
-
-      - name: Update CHANGELOG.md
-        run: |
-          if [ ! -f CHANGELOG.md ]; then
-            echo "# Changelog\n\nAll notable changes to this project will be documented in this file.\n" > CHANGELOG.md
-          fi
-          echo "${{ steps.release_notes.outputs.notes }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
-
-      - name: Commit and push CHANGELOG.md
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add CHANGELOG.md
-          git commit -m "docs: update changelog for version ${{ github.event.inputs.version }}"
-          git push
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sinceTag: ${{ github.ref }}
+          futureRelease: ${{ github.event.inputs.version }}
+          pullRequests: true
+          prWoLabels: false
+          issues: true
+          issuesWoLabels: false
+          filterByMilestone: false
+          author: true
+          unreleased: false
+          breakingLabel: '### Breaking Changes'
+          enhancementLabel: '### Enhancements'
+          bugsLabel: '### Bug Fixes'
+          deprecatedLabel: '### Deprecated'
+          removedLabel: '### Removed'
+          securityLabel: '### Security'
+          issuesLabel: '### Issues'
+          prLabel: '### Pull Requests'
+          addSections: '{"documentation":{"prefix":"### Documentation","labels":["documentation"]},"feature":{"prefix":"### Features","labels":["feature"]}}'
 
       - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
+          name: Release ${{ github.event.inputs.version }}
           tag_name: ${{ github.event.inputs.version }}
-          release_name: Release ${{ github.event.inputs.version }}
-          body: ${{ steps.release_notes.outputs.notes }}
+          body_path: CHANGELOG.md
           draft: false
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
