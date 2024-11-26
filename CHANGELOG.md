@@ -1,9 +1,18 @@
 # Changelog
 
-## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
+## [1.0.37](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.37) (26-Nov-2024)
 
+- Super urgent hotfix [\#47](https://github.com/phpfour/changelog-tag-release-action/issues/47)
+
+- Landing Page Builder [\#46](https://github.com/phpfour/changelog-tag-release-action/issues/46)
+
+## [1.0.36](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.36) (18-Oct-2024)
+
+- Guided missile attack! [\#45](https://github.com/phpfour/changelog-tag-release-action/issues/45)
 - Releasing tagged commit [\#44](https://github.com/phpfour/changelog-tag-release-action/issues/44)
 - Tagging a commit [\#43](https://github.com/phpfour/changelog-tag-release-action/issues/43)
+
+## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
 
 ## [1.0.34](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.34) (27-Jun-2023)
 
