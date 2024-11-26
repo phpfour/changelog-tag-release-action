@@ -27,8 +27,22 @@ jobs:
           output: CHANGELOG.md
           futureRelease: ${{ github.event.inputs.new_tag }}
           dateFormat: '%d-%b-%Y'
-          simpleList: true
-          compareLink: false
+          pullRequests: true
+          prWoLabels: false
+          issues: true
+          issuesWoLabels: false
+          filterByMilestone: false
+          author: true
+          unreleased: false
+          breakingLabel: '### Breaking Changes'
+          enhancementLabel: '### Enhancements'
+          bugsLabel: '### Bug Fixes'
+          deprecatedLabel: '### Deprecated'
+          removedLabel: '### Removed'
+          securityLabel: '### Security'
+          issuesLabel: '### Issues'
+          prLabel: '### Pull Requests'
+          addSections: '{"documentation":{"prefix":"### Documentation","labels":["documentation"]},"feature":{"prefix":"### Features","labels":["feature"]}}'
           usernamesAsGithubLogins: true
       - name: Commit changes
         id: commit_changelog
@@ -68,7 +82,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Release ${{ github.event.inputs.version }}
+          name: ${{ github.event.inputs.new_tag }}
           tag_name: ${{ github.event.inputs.new_tag }}
           body: ${{steps.extract_change.outputs.changelog}}
           draft: false
