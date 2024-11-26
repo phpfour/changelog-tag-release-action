@@ -40,115 +40,119 @@ jobs:
             const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
             
             // Query for PRs
-            const prQuery = `query ($owner: String!, $repo: String!, $base: String!) {
-              repository(owner: $owner, name: $repo) {
-                pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
-                  nodes {
-                    title
-                    number
-                    mergedAt
-                    labels(first: 5) {
-                      nodes {
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
-
-            // Query for Issues (excluding PRs)
-            const issueQuery = `query ($owner: String!, $repo: String!) {
-              repository(owner: $owner, name: $repo) {
-                issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
-                  nodes {
-                    title
-                    number
-                    closedAt
-                    labels(first: 5) {
-                      nodes {
-                        name
-                      }
-                    }
-                    pullRequest {
+            const prData = await github.graphql(`
+              query ($owner: String!, $repo: String!, $base: String!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                    nodes {
+                      title
                       number
+                      mergedAt
+                      labels(first: 5) {
+                        nodes {
+                          name
+                        }
+                      }
                     }
                   }
                 }
               }
-            }`;
-
-            // Fetch PRs and Issues
-            const prData = await github.graphql(prQuery, {
+            `, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               base: 'main'
             });
 
-            const issueData = await github.graphql(issueQuery, {
+            // Query for Issues
+            const issueData = await github.graphql(`
+              query ($owner: String!, $repo: String!) {
+                repository(owner: $owner, name: $repo) {
+                  issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                    nodes {
+                      title
+                      number
+                      closedAt
+                      labels(first: 5) {
+                        nodes {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, {
               owner: context.repo.owner,
               repo: context.repo.repo
             });
 
             // Process PRs
             const prs = prData.repository.pullRequests.nodes.map(pr => ({
-              ...pr,
+              title: pr.title,
+              number: pr.number,
               date: pr.mergedAt,
+              labels: pr.labels.nodes.map(label => label.name),
               type: 'pr'
             }));
 
-            // Process Issues (excluding those that are PRs)
-            const issues = issueData.repository.issues.nodes
-              .filter(issue => !issue.pullRequest) // Exclude issues that are PRs
-              .map(issue => ({
-                title: issue.title,
-                number: issue.number,
-                date: issue.closedAt,
-                labels: issue.labels,
-                type: 'issue'
-              }));
+            // Process Issues
+            const issues = issueData.repository.issues.nodes.map(issue => ({
+              title: issue.title,
+              number: issue.number,
+              date: issue.closedAt,
+              labels: issue.labels.nodes.map(label => label.name),
+              type: 'issue'
+            }));
 
-            // Combine and filter items after the last release
-            let items = [...prs, ...issues].filter(item => {
+            // Filter items after the last release
+            const filterByDate = item => {
               if (!latestTag) return true;
               return new Date(item.date) > new Date(context.payload.before);
-            });
-
-            // Group items by label and type
-            const groupedItems = {
-              features: { prs: [], issues: [] },
-              enhancements: { prs: [], issues: [] },
-              bugs: { prs: [], issues: [] },
-              documentation: { prs: [], issues: [] },
-              other: { prs: [], issues: [] }
             };
 
-            items.forEach(item => {
-              const labels = item.labels.nodes.map(label => label.name);
-              const type = item.type === 'pr' ? 'prs' : 'issues';
-              
-              let grouped = false;
-              if (labels.includes('feature')) {
-                groupedItems.features[type].push(item);
-                grouped = true;
-              }
-              if (labels.includes('enhancement')) {
-                groupedItems.enhancements[type].push(item);
-                grouped = true;
-              }
-              if (labels.includes('bug')) {
-                groupedItems.bugs[type].push(item);
-                grouped = true;
-              }
-              if (labels.includes('documentation')) {
-                groupedItems.documentation[type].push(item);
-                grouped = true;
-              }
-              
-              if (!grouped) {
-                groupedItems.other[type].push(item);
-              }
-            });
+            const filteredPRs = prs.filter(filterByDate);
+            const filteredIssues = issues.filter(filterByDate);
+
+            // Group items by label
+            const groupItems = (items) => {
+              const grouped = {
+                features: [],
+                enhancements: [],
+                bugs: [],
+                documentation: [],
+                other: []
+              };
+
+              items.forEach(item => {
+                let categorized = false;
+                
+                if (item.labels.includes('feature')) {
+                  grouped.features.push(item);
+                  categorized = true;
+                }
+                if (item.labels.includes('enhancement')) {
+                  grouped.enhancements.push(item);
+                  categorized = true;
+                }
+                if (item.labels.includes('bug')) {
+                  grouped.bugs.push(item);
+                  categorized = true;
+                }
+                if (item.labels.includes('documentation')) {
+                  grouped.documentation.push(item);
+                  categorized = true;
+                }
+                
+                if (!categorized) {
+                  grouped.other.push(item);
+                }
+              });
+
+              return grouped;
+            };
+
+            const groupedPRs = groupItems(filteredPRs);
+            const groupedIssues = groupItems(filteredIssues);
 
             // Generate markdown
             let markdown = `## [${process.env.VERSION}] - ${new Date().toISOString().split('T')[0]}\n\n`;
@@ -161,28 +165,26 @@ jobs:
               other: 'Other Changes'
             };
 
-            for (const [key, title] of Object.entries(categories)) {
-              const prs = groupedItems[key].prs;
-              const issues = groupedItems[key].issues;
+            // Helper function to add items to markdown
+            const addItemsToMarkdown = (items, type) => {
+              if (items.length === 0) return '';
               
-              if (prs.length > 0 || issues.length > 0) {
+              let section = `#### ${type === 'pr' ? 'Pull Requests' : 'Issues'}\n`;
+              items.forEach(item => {
+                section += `- ${item.title} (#${item.number})\n`;
+              });
+              return section + '\n';
+            };
+
+            // Generate content for each category
+            for (const [key, title] of Object.entries(categories)) {
+              const prContent = addItemsToMarkdown(groupedPRs[key], 'pr');
+              const issueContent = addItemsToMarkdown(groupedIssues[key], 'issue');
+              
+              if (prContent || issueContent) {
                 markdown += `### ${title}\n\n`;
-                
-                if (prs.length > 0) {
-                  markdown += `#### Pull Requests\n`;
-                  prs.forEach(pr => {
-                    markdown += `- ${pr.title} (#${pr.number})\n`;
-                  });
-                  markdown += '\n';
-                }
-                
-                if (issues.length > 0) {
-                  markdown += `#### Issues\n`;
-                  issues.forEach(issue => {
-                    markdown += `- ${issue.title} (#${issue.number})\n`;
-                  });
-                  markdown += '\n';
-                }
+                markdown += prContent;
+                markdown += issueContent;
               }
             }
 
