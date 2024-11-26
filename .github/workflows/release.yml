@@ -34,9 +34,12 @@ jobs:
 
       - name: Generate release notes
         id: release_notes
+        env:
+          VERSION: ${{ github.event.inputs.version }}
         uses: actions/github-script@v7
         with:
           script: |
+            const version = process.env.VERSION;
             const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
             
             // Query for PRs
@@ -155,7 +158,7 @@ jobs:
             const groupedIssues = groupItems(filteredIssues);
 
             // Generate markdown
-            let markdown = `## [${process.env.VERSION}] - ${new Date().toISOString().split('T')[0]}\n\n`;
+            let markdown = `## [${version}] - ${new Date().toISOString().split('T')[0]}\n\n`;
 
             const categories = {
               features: 'Features',
@@ -210,7 +213,6 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.event.inputs.version }}
         with:
           tag_name: ${{ github.event.inputs.version }}
           release_name: Release ${{ github.event.inputs.version }}
