@@ -39,10 +39,10 @@ jobs:
           script: |
             const latestTag = '${{ steps.latest_release.outputs.latest_tag }}';
             
-            // Query for both PRs and Issues
-            const query = `query ($owner: String!, $repo: String!, $base: String!) {
+            // Query for PRs
+            const prQuery = `query ($owner: String!, $repo: String!, $base: String!) {
               repository(owner: $owner, name: $repo) {
-                pullRequests: pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                pullRequests(first: 100, states: MERGED, baseRefName: $base, orderBy: {field: UPDATED_AT, direction: DESC}) {
                   nodes {
                     title
                     number
@@ -52,10 +52,15 @@ jobs:
                         name
                       }
                     }
-                    type: __typename
                   }
                 }
-                issues: issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
+              }
+            }`;
+
+            // Query for Issues (excluding PRs)
+            const issueQuery = `query ($owner: String!, $repo: String!) {
+              repository(owner: $owner, name: $repo) {
+                issues(first: 100, states: CLOSED, orderBy: {field: UPDATED_AT, direction: DESC}) {
                   nodes {
                     title
                     number
@@ -65,35 +70,46 @@ jobs:
                         name
                       }
                     }
-                    type: __typename
-                    isPullRequest: isPullRequest
+                    pullRequest {
+                      number
+                    }
                   }
                 }
               }
             }`;
 
-            const { repository } = await github.graphql(query, {
+            // Fetch PRs and Issues
+            const prData = await github.graphql(prQuery, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               base: 'main'
             });
 
-            // Combine and filter PRs and Issues
-            let items = [
-              ...repository.pullRequests.nodes.map(pr => ({
-                ...pr,
-                date: pr.mergedAt
-              })),
-              ...repository.issues.nodes
-                .filter(issue => !issue.isPullRequest) // Exclude issues that are actually PRs
-                .map(issue => ({
-                  ...issue,
-                  date: issue.closedAt
-                }))
-            ];
+            const issueData = await github.graphql(issueQuery, {
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
 
-            // Filter items after the last release
-            items = items.filter(item => {
+            // Process PRs
+            const prs = prData.repository.pullRequests.nodes.map(pr => ({
+              ...pr,
+              date: pr.mergedAt,
+              type: 'pr'
+            }));
+
+            // Process Issues (excluding those that are PRs)
+            const issues = issueData.repository.issues.nodes
+              .filter(issue => !issue.pullRequest) // Exclude issues that are PRs
+              .map(issue => ({
+                title: issue.title,
+                number: issue.number,
+                date: issue.closedAt,
+                labels: issue.labels,
+                type: 'issue'
+              }));
+
+            // Combine and filter items after the last release
+            let items = [...prs, ...issues].filter(item => {
               if (!latestTag) return true;
               return new Date(item.date) > new Date(context.payload.before);
             });
@@ -104,14 +120,13 @@ jobs:
               enhancements: { prs: [], issues: [] },
               bugs: { prs: [], issues: [] },
               documentation: { prs: [], issues: [] },
-              other: { prs: [], issues: [] } // For items without matching labels
+              other: { prs: [], issues: [] }
             };
 
             items.forEach(item => {
               const labels = item.labels.nodes.map(label => label.name);
-              const type = item.type === 'PullRequest' ? 'prs' : 'issues';
+              const type = item.type === 'pr' ? 'prs' : 'issues';
               
-              // Determine the group based on labels
               let grouped = false;
               if (labels.includes('feature')) {
                 groupedItems.features[type].push(item);
@@ -130,7 +145,6 @@ jobs:
                 grouped = true;
               }
               
-              // If no matching labels, add to 'other'
               if (!grouped) {
                 groupedItems.other[type].push(item);
               }
