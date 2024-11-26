@@ -27,7 +27,7 @@ jobs:
         uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          sinceTag: ${{ github.ref }}
+          # sinceTag: ${{ github.ref }}
           futureRelease: ${{ github.event.inputs.version }}
           pullRequests: true
           prWoLabels: false
