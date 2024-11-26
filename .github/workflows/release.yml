@@ -7,6 +7,10 @@ on:
         description: 'Version number (e.g., 1.0.5)'
         required: true
         type: string
+      version_prev:
+        description: 'Previous Version number (e.g., 1.0.5)'
+        required: true
+        type: string
 
 jobs:
   changelog:
@@ -27,8 +31,12 @@ jobs:
         uses: heinrichreimer/github-changelog-generator-action@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # sinceTag: ${{ github.ref }}
+          sinceTag: ${{ github.event.inputs.version_prev }}
           futureRelease: ${{ github.event.inputs.version }}
+          dateFormat: '%d-%b-%Y'
+          simpleList: true
+          compareLink: false
+          usernamesAsGithubLogins: true
           pullRequests: true
           prWoLabels: false
           issues: true
