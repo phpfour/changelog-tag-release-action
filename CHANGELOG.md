@@ -1,9 +1,3 @@
-## [1.0.37] - 2024-11-26
-
-
-## [undefined] - 2024-11-26
-
-
 # Changelog
 
 ## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
