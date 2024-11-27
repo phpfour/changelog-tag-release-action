@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.38](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.38) (26-Nov-2024)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.37...1.0.38)
+
 ## [1.0.37](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.37) (26-Nov-2024)
 
 [Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.36...1.0.37)
@@ -14,7 +18,7 @@
 
 ## [1.0.36](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.36) (18-Oct-2024)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.35...1.0.36)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.34...1.0.36)
 
 ### Enhancements
 
@@ -22,13 +26,13 @@
 - Releasing tagged commit [\#44](https://github.com/phpfour/changelog-tag-release-action/issues/44)
 - Tagging a commit [\#43](https://github.com/phpfour/changelog-tag-release-action/issues/43)
 
-## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
-
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.34...1.0.35)
-
 ## [1.0.34](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.34) (27-Jun-2023)
 
-[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.33...1.0.34)
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.35...1.0.34)
+
+## [1.0.35](https://github.com/phpfour/changelog-tag-release-action/tree/1.0.35) (27-Jun-2023)
+
+[Full Changelog](https://github.com/phpfour/changelog-tag-release-action/compare/1.0.33...1.0.35)
 
 ### Bug Fixes
 
